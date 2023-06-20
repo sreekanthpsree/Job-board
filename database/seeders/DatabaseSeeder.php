@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        \App\Models\User::factory()->create([
+            'name' => 'Sreekanth P',
+            'email' => 'sree@sree.com',
+            'password' => '12345'
+        ]);
+
+
         \App\Models\User::factory(300)->create();
 
         $users = \App\Models\User::all()->shuffle();
@@ -24,16 +34,19 @@ class DatabaseSeeder extends Seeder
         $employers = \App\Models\Employer::all();
 
         for ($i = 0; $i < 100; $i++) {
-            \App\Models\Job::factory()->create([
+            Job::factory()->create([
                 'employer_id' => $employers->random()->id
             ]);
         }
+        foreach ($users as $user) {
+            $jobs = Job::inRandomOrder()->take(rand(0, 4))->get();
 
-        \App\Models\User::factory(10)->create();
-        \App\Models\Job::factory(100)->create();
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            foreach ($jobs as $job) {
+                JobApplication::factory()->create([
+                    'job_id' => $job->id,
+                    'user_id' => $user->id
+                ]);
+            }
+        }
     }
 }
