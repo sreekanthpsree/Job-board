@@ -33,6 +33,12 @@
                             <x-button>Delete</x-button>
                         </form>
                     </div>
+                @else
+                    <form class="flex space-x-2" action="{{ route('my_jobs.restore', $job) }}" method="post">
+                        @csrf
+                        {{-- @method('PUT') --}}
+                        <x-button>Restore</x-button>
+                    </form>
                 @endif
             </div>
         </x-job-card>

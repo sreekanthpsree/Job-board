@@ -74,6 +74,14 @@ class MyJobController extends Controller
 
         return redirect()->route('my_jobs.index')->with('success', 'Job updated successfully');
     }
+    public function restore(Job $myJob)
+    {
+        dd('asdasd');
+
+        Job::withTrashed()->find($myJob->id)->restore();
+
+        return redirect()->route('my_jobs.index')->with('success', 'Job restored successfully');
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -83,4 +91,5 @@ class MyJobController extends Controller
         $myJob->delete();
         return redirect()->route('my_jobs.index')->with('success', 'Job was deleted successfully');
     }
+
 }
